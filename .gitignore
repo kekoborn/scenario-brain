@@ -32,6 +32,9 @@ yarn-error.log
 sessions/*/
 !sessions/.gitkeep
 
-# Visual research screenshots (large files)
+# Visual research (large files)
 visual-research/screenshots/
 !visual-research/screenshots/.gitkeep
+visual-research/*.webm
+visual-research/*.mp4
+visual-research/*.vtt
