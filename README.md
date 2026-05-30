@@ -1,6 +1,6 @@
 # Scenario Brain — AI-система создания сценариев для YouTube
 
-**Версия:** 1.9  
+**Версия:** 2.0  
 **Дата:** 30 мая 2026  
 **Статус:** ✅ Production ready  
 **Репозиторий:** [github.com/kekoborn/scenario-brain](https://github.com/kekoborn/scenario-brain) (private)

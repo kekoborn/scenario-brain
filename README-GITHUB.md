@@ -2,7 +2,7 @@
 
 **AI-система создания сценариев для YouTube** в стиле Михаила Дашкиева
 
-[![Version](https://img.shields.io/badge/version-1.9-blue)](https://github.com/kekoborn/scenario-brain)
+[![Version](https://img.shields.io/badge/version-2.0-blue)](https://github.com/kekoborn/scenario-brain)
 [![Status](https://img.shields.io/badge/status-production-green)](https://github.com/kekoborn/scenario-brain)
 [![Private](https://img.shields.io/badge/repo-private-red)](https://github.com/kekoborn/scenario-brain)
 
@@ -174,7 +174,7 @@ GitHub → Settings → Collaborators → Add people
 
 ## 📊 Статистика
 
-- **Версия:** 1.9
+- **Версия:** 2.0
 - **Дата создания:** 30 мая 2026
 - **Этапов workflow:** 11
 - **Визуальных паттернов:** 26
