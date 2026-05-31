@@ -17,18 +17,10 @@
         .block-title { font-size: 1.3em; font-weight: 600; color: #333; }
         .block-text { white-space: pre-wrap; line-height: 1.8; margin: 15px 0;
                       padding: 15px; background: #fafafa; border-radius: 4px; }
-        .status-buttons { display: flex; gap: 8px; flex-wrap: wrap; margin: 15px 0; }
-        .status-btn { padding: 8px 16px; border: 2px solid #ddd; background: white;
-                      border-radius: 4px; cursor: pointer; transition: all 0.2s;
-                      font-size: 0.9em; font-weight: 500; }
-        .status-btn:hover { border-color: #999; }
-        .status-btn.active { background: #4CAF50; color: white; border-color: #4CAF50; }
-        .status-btn.edit { border-color: #FFC107; }
-        .status-btn.edit.active { background: #FFC107; }
-        .status-btn.weak { border-color: #FF9800; }
-        .status-btn.weak.active { background: #FF9800; }
-        .status-btn.cut { border-color: #F44336; }
-        .status-btn.cut.active { background: #F44336; }
+        .status-select { width: 100%; padding: 12px; border: 2px solid #ddd;
+                         border-radius: 4px; font-family: inherit; font-size: 1em;
+                         margin: 15px 0; background: white; cursor: pointer; }
+        .status-select:focus { outline: none; border-color: #4CAF50; }
         .comment-box { width: 100%; padding: 12px; border: 2px solid #ddd;
                        border-radius: 4px; font-family: inherit; margin-top: 10px;
                        min-height: 60px; resize: vertical; }
@@ -77,17 +69,19 @@
     <script>
         const blocks = BLOCKS_DATA_PLACEHOLDER;
 
-        const statusLabels = {
-            'OK': 'OK',
-            'EDIT': 'EDIT',
-            'WEAK': 'WEAK',
-            'CUT': 'CUT',
-            'NOT_TOV': 'НЕ TOV',
-            'ADD_PROOF': '+ КЕЙС',
-            'ADD_ACTION': '+ ДЕЙСТВИЕ',
-            'TOO_LONG': 'ДЛИННО',
-            'TOO_ABSTRACT': 'АБСТРАКТНО'
-        };
+        const statusOptions = [
+            { value: '', label: '— Выбери статус —' },
+            { value: 'OK', label: 'ОК — берём как есть' },
+            { value: 'EDIT', label: 'Переписать — мысль ок, формулировка нет' },
+            { value: 'WEAK', label: 'Слабый блок — нужен новый заход' },
+            { value: 'CUT', label: 'Удалить — не нужен' },
+            { value: 'NOT_TOV', label: 'Не тот TOV — не похоже на Михаила' },
+            { value: 'ADD_PROOF', label: 'Добавить кейс/пример/цифры' },
+            { value: 'ADD_ACTION', label: 'Добавить практическое действие' },
+            { value: 'TOO_LONG', label: 'Слишком длинно — сократить' },
+            { value: 'TOO_ABSTRACT', label: 'Слишком абстрактно — конкретики' },
+            { value: 'MOVE', label: 'Перенести в другой блок' }
+        ];
 
         function renderBlocks() {
             const container = document.getElementById('blocks-container');
@@ -96,42 +90,44 @@
             blocks.forEach((block, index) => {
                 const blockDiv = document.createElement('div');
                 blockDiv.className = 'block';
+
+                const optionsHTML = statusOptions.map(opt =>
+                    `<option value="${opt.value}">${opt.label}</option>`
+                ).join('');
+
                 blockDiv.innerHTML = `
                     <div class="block-header">
                         <div class="block-title">Блок ${index + 1}: ${block.title}</div>
                     </div>
                     <div class="block-text">${block.text}</div>
-                    <div class="status-buttons" id="status-${index}">
-                        ${Object.entries(statusLabels).map(([key, label]) =>
-                            `<button class="status-btn ${key.toLowerCase().replace('_', '-')}"
-                                     onclick="setStatus(${index}, '${key}')">${label}</button>`
-                        ).join('')}
-                    </div>
+                    <select class="status-select" id="status-${index}" onchange="updateStats()">
+                        ${optionsHTML}
+                    </select>
                     <textarea class="comment-box" id="comment-${index}"
-                              placeholder="Комментарий (если нужен)"></textarea>
+                              placeholder="Комментарий (если нужно что-то уточнить)"></textarea>
                 `;
                 container.appendChild(blockDiv);
             });
         }
 
-        function setStatus(blockIndex, status) {
-            const container = document.getElementById(`status-${blockIndex}`);
-            container.querySelectorAll('.status-btn').forEach(btn => btn.classList.remove('active'));
-            container.querySelector(`.status-btn.${status.toLowerCase().replace('_', '-')}`).classList.add('active');
-            blocks[blockIndex].status = status;
-            updateStats();
-        }
-
         function updateStats() {
-            const reviewed = blocks.filter(b => b.status).length;
+            let reviewed = 0;
+            blocks.forEach((block, index) => {
+                const select = document.getElementById(`status-${index}`);
+                if (select && select.value) reviewed++;
+            });
             document.getElementById('reviewed-blocks').textContent = reviewed;
         }
 
         function exportResults() {
             let result = '';
             blocks.forEach((block, index) => {
-                const status = block.status || 'НЕ ПРОВЕРЕН';
+                const select = document.getElementById(`status-${index}`);
+                const statusValue = select ? select.value : '';
+                const statusLabel = statusOptions.find(opt => opt.value === statusValue);
+                const status = statusValue ? statusValue : 'НЕ ПРОВЕРЕН';
                 const comment = document.getElementById(`comment-${index}`).value;
+
                 result += `Блок ${index + 1}: ${status}`;
                 if (comment) result += ` — ${comment}`;
                 result += '\n';
