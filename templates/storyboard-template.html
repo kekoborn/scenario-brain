@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Раскадровка: PROJECT_NAME_PLACEHOLDER</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .meta {
+            color: #888;
+            margin-bottom: 60px;
+            font-size: 14px;
+        }
+
+        .block {
+            margin-bottom: 80px;
+        }
+
+        .block-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #333;
+        }
+
+        .block-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .block-title {
+            flex: 1;
+        }
+
+        .block-title h2 {
+            font-size: 32px;
+            margin-bottom: 5px;
+        }
+
+        .block-time {
+            color: #888;
+            font-size: 14px;
+        }
+
+        .phrases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+            gap: 25px;
+        }
+
+        .phrase-card {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .phrase-card:hover {
+            border-color: #667eea;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+        }
+
+        .phrase-timecode {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #667eea;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .phrase-text {
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+            padding-right: 80px;
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .phrase-section {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #2a2a2a;
+        }
+
+        .phrase-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #888;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .phrase-content {
+            font-size: 14px;
+            color: #ccc;
+            white-space: pre-wrap;
+        }
+
+        .pattern-badge {
+            display: inline-block;
+            background: #764ba2;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 6px;
+        }
+
+        .animation-timeline {
+            background: #0f0f0f;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.8;
+            color: #aaa;
+        }
+
+        .broll-options {
+            list-style: none;
+            margin-top: 8px;
+        }
+
+        .broll-options li {
+            padding: 6px 0;
+            padding-left: 16px;
+            position: relative;
+            font-size: 13px;
+            color: #ccc;
+        }
+
+        .broll-options li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+        }
+
+        .artifact-tag {
+            display: inline-block;
+            background: #2a5;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+
+        .reference {
+            font-style: italic;
+            color: #999;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        .export-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 15px 30px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s;
+        }
+
+        .export-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.6);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎬 Раскадровка: PROJECT_NAME_PLACEHOLDER</h1>
+        <div class="meta">Визуальный слой — смысловые фразы</div>
+
+        <div id="blocks-container">
+            <!-- Блоки генерируются через JS -->
+        </div>
+
+        <button class="export-btn" onclick="window.print()">📄 Печать / PDF</button>
+    </div>
+
+    <script>
+        const storyboard = STORYBOARD_DATA_PLACEHOLDER;
+
+        function renderStoryboard() {
+            const container = document.getElementById('blocks-container');
+
+            storyboard.forEach((block, blockIndex) => {
+                const blockDiv = document.createElement('div');
+                blockDiv.className = 'block';
+
+                const phrasesHTML = block.phrases.map(phrase => {
+                    let html = `
+                        <div class="phrase-card">
+                            <div class="phrase-timecode">${phrase.timecode}</div>
+                            <div class="phrase-text">${phrase.text}</div>
+                    `;
+
+                    if (phrase.visual) {
+                        html += `
+                            <div class="phrase-section">
+                                <div class="phrase-label">Визуал</div>
+                                <div class="phrase-content">
+                                    <span class="pattern-badge">${phrase.pattern}</span>
+                                    ${phrase.visual}
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                    if (phrase.animation) {
+                        html += `
+                            <div class="phrase-section">
+                                <div class="phrase-label">Анимация</div>
+                                <div class="animation-timeline">${phrase.animation}</div>
+                            </div>
+                        `;
+                    }
+
+                    if (phrase.broll && phrase.broll.length > 0) {
+                        html += `
+                            <div class="phrase-section">
+                                <div class="phrase-label">B-Roll</div>
+                                <ul class="broll-options">
+                                    ${phrase.broll.map(opt => `<li>${opt}</li>`).join('')}
+                                </ul>
+                            </div>
+                        `;
+                    }
+
+                    if (phrase.artifact) {
+                        html += `<div class="artifact-tag">📦 Артефакт: ${phrase.artifact}</div>`;
+                    }
+
+                    if (phrase.reference) {
+                        html += `<div class="reference">Референс: ${phrase.reference}</div>`;
+                    }
+
+                    html += '</div>';
+                    return html;
+                }).join('');
+
+                blockDiv.innerHTML = `
+                    <div class="block-header">
+                        <div class="block-number">${blockIndex + 1}</div>
+                        <div class="block-title">
+                            <h2>${block.title}</h2>
+                            <div class="block-time">${block.timecode}</div>
+                        </div>
+                    </div>
+                    <div class="phrases-grid">
+                        ${phrasesHTML}
+                    </div>
+                `;
+
+                container.appendChild(blockDiv);
+            });
+        }
+
+        renderStoryboard();
+    </script>
+</body>
+</html>
