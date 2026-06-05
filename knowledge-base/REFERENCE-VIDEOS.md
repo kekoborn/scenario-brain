@@ -10,6 +10,13 @@
 - **Визуальные паттерны** — анализ 8 видео @dashkiev.m (41 скриншот) → см. `VISUAL-PATTERNS.md`.
 - **Структуры** — 5 архитектур из реальных выступлений → см. `STRUCTURES-analysis.md`.
 
+## Реальные исходники (зашиты в репо)
+- `visual-research/video-ids.txt` — ID исходных видео на YouTube:
+  `MOwS4ceLHls`, `xLzRYbasKLM`, `GG4hv8Pj09g` (открывать `youtube.com/watch?v=<ID>`).
+- `visual-research/*.jpg` — скриншоты ключевых кадров этих видео.
+- `visual-research/VIDEO-01-ANALYSIS.md` — покадровый разбор; `ANALYSIS-TEMPLATE.md` —
+  шаблон для разбора новых видео.
+
 ---
 
 ## Эталонные реплики (как звучит Михаил)
