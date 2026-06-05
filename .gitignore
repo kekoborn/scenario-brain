@@ -3,3 +3,4 @@ __pycache__/
 .DS_Store
 sessions/*
 !sessions/README.md
+scenario-brain-gpt-knowledge.zip
