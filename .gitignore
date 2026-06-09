@@ -1,40 +1,9 @@
-# OS
-.DS_Store
-Thumbs.db
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# Python
 __pycache__/
 *.pyc
-*.pyo
-*.pyd
-.Python
-env/
-venv/
-*.egg-info/
-
-# Node
-node_modules/
-npm-debug.log
-yarn-error.log
-
-# Temp
-*.tmp
-*.log
-.cache/
-
-# Sessions (personal data)
-sessions/*/
-!sessions/.gitkeep
-
-# Visual research (large files)
-visual-research/screenshots/
-!visual-research/screenshots/.gitkeep
-visual-research/*.webm
-visual-research/*.mp4
-visual-research/*.vtt
+.DS_Store
+sessions/*
+!sessions/README.md
+scenario-brain-gpt-knowledge.zip
+# Исходные видео — крупные бинарники, выходят за лимит GitHub 100МБ/файл.
+# Для шеринга использовать Git LFS или внешнее хранилище.
+*.mp4.webm

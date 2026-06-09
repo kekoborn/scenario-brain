@@ -1,146 +1,287 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ревью блоков — PROJECT_NAME_PLACEHOLDER</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-               background: #f5f5f5; padding: 20px; line-height: 1.6; }
-        .container { max-width: 1200px; margin: 0 auto; }
-        h1 { margin-bottom: 30px; color: #333; }
-        .block { background: white; border-radius: 8px; padding: 20px; margin-bottom: 20px;
-                 box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .block-header { display: flex; justify-content: space-between; align-items: center;
-                        margin-bottom: 15px; padding-bottom: 15px; border-bottom: 2px solid #eee; }
-        .block-title { font-size: 1.3em; font-weight: 600; color: #333; }
-        .block-text { white-space: pre-wrap; line-height: 1.8; margin: 15px 0;
-                      padding: 15px; background: #fafafa; border-radius: 4px; }
-        .status-select { width: 100%; padding: 12px; border: 2px solid #ddd;
-                         border-radius: 4px; font-family: inherit; font-size: 1em;
-                         margin: 15px 0; background: white; cursor: pointer; }
-        .status-select:focus { outline: none; border-color: #4CAF50; }
-        .comment-box { width: 100%; padding: 12px; border: 2px solid #ddd;
-                       border-radius: 4px; font-family: inherit; margin-top: 10px;
-                       min-height: 60px; resize: vertical; }
-        .comment-box:focus { outline: none; border-color: #4CAF50; }
-        .export-btn { position: fixed; bottom: 30px; right: 30px; padding: 15px 30px;
-                      background: #4CAF50; color: white; border: none; border-radius: 8px;
-                      font-size: 1.1em; font-weight: 600; cursor: pointer;
-                      box-shadow: 0 4px 8px rgba(0,0,0,0.2); transition: all 0.3s; }
-        .export-btn:hover { background: #45a049; transform: translateY(-2px);
-                            box-shadow: 0 6px 12px rgba(0,0,0,0.3); }
-        .stats { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px;
-                 display: flex; gap: 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .stat { flex: 1; }
-        .stat-label { font-size: 0.9em; color: #666; margin-bottom: 5px; }
-        .stat-value { font-size: 2em; font-weight: 700; color: #4CAF50; }
-        .toast { position: fixed; top: 30px; right: 30px; padding: 15px 25px;
-                 background: #333; color: white; border-radius: 8px;
-                 box-shadow: 0 4px 8px rgba(0,0,0,0.3); opacity: 0;
-                 transition: opacity 0.3s; pointer-events: none; }
-        .toast.show { opacity: 1; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ревью сценария — PROJECT_TITLE_PLACEHOLDER</title>
+<style>
+  :root{
+    --bg:#f4f4f5; --card:#ffffff; --ink:#1a1a1e; --muted:#6b6b76;
+    --line:#e4e4e8; --accent:#2f6df0; --accent-ink:#1d4fc4;
+    --ok:#16a34a; --warn:#d97706; --bad:#dc2626; --move:#7c3aed;
+    --shadow:0 1px 2px rgba(0,0,0,.04),0 8px 24px rgba(0,0,0,.05);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    padding-bottom:96px;}
+  .wrap{max-width:880px;margin:0 auto;padding:24px 20px;}
+  header h1{font-size:26px;margin:0 0 4px;letter-spacing:-.02em}
+  header .sub{color:var(--muted);font-size:15px;margin-bottom:20px}
+
+  /* онбординг */
+  .howto{background:#eef4ff;border:1px solid #d3e1ff;border-radius:14px;
+    padding:18px 20px;margin-bottom:22px}
+  .howto h2{margin:0 0 10px;font-size:16px;color:var(--accent-ink)}
+  .howto ol{margin:0;padding-left:20px}
+  .howto li{margin:6px 0}
+  .howto .pill{display:inline-block;background:#fff;border:1px solid #d3e1ff;
+    border-radius:6px;padding:1px 7px;font-size:13px;font-weight:600;color:var(--accent-ink)}
+
+  details.legend{margin:0 0 22px;background:var(--card);border:1px solid var(--line);
+    border-radius:12px;padding:10px 16px}
+  details.legend summary{cursor:pointer;font-weight:600;font-size:14px;color:var(--muted)}
+  .legend table{width:100%;border-collapse:collapse;margin-top:10px;font-size:14px}
+  .legend td{padding:5px 8px;border-top:1px solid var(--line);vertical-align:top}
+  .legend td:first-child{white-space:nowrap;font-weight:600}
+
+  /* прогресс */
+  .progress{position:sticky;top:0;z-index:5;background:var(--bg);
+    padding:8px 0 12px;margin-bottom:8px}
+  .bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden}
+  .bar > i{display:block;height:100%;width:0;background:var(--accent);
+    transition:width .3s ease}
+  .progress .lbl{font-size:13px;color:var(--muted);margin-top:6px}
+
+  .block{background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:20px 22px;margin:14px 0;box-shadow:var(--shadow)}
+  .block .top{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+  .block .num{font-weight:700;font-size:13px;color:#fff;background:var(--ink);
+    border-radius:7px;padding:2px 9px}
+  .block h3{margin:0;font-size:18px;letter-spacing:-.01em;flex:1}
+  .block .time{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .block .text{margin:12px 0;white-space:pre-wrap}
+  .block .key{border-left:3px solid var(--accent);background:#f6f9ff;
+    padding:8px 14px;border-radius:0 8px 8px 0;color:var(--accent-ink);
+    font-weight:500;margin:12px 0}
+  .ctrl{display:grid;grid-template-columns:240px 1fr;gap:14px;margin-top:16px;
+    padding-top:16px;border-top:1px dashed var(--line)}
+  @media(max-width:640px){.ctrl{grid-template-columns:1fr}}
+  label.fld{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:6px}
+  select,textarea{width:100%;font:inherit;color:var(--ink);background:#fff;
+    border:1.5px solid var(--line);border-radius:10px;padding:10px 12px}
+  select:focus,textarea:focus{outline:none;border-color:var(--accent)}
+  textarea{min-height:84px;resize:vertical}
+  .block[data-status="OK"]{border-color:#bfe7cb}
+  .block[data-status="CUT"]{border-color:#f3c4c4}
+  .tag{display:inline-block;font-size:12px;font-weight:700;padding:2px 9px;
+    border-radius:99px;margin-left:auto}
+  .tag.set{background:#eef4ff;color:var(--accent-ink)}
+
+  /* нижняя панель */
+  .actionbar{position:fixed;left:0;right:0;bottom:0;background:#fff;
+    border-top:1px solid var(--line);box-shadow:0 -4px 20px rgba(0,0,0,.06);z-index:20}
+  .actionbar .inner{max-width:880px;margin:0 auto;padding:12px 20px;
+    display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  .actionbar .cnt{font-size:13px;color:var(--muted);margin-right:auto}
+  button{font:inherit;font-weight:600;border:none;border-radius:10px;
+    padding:11px 18px;cursor:pointer}
+  .btn-primary{background:var(--accent);color:#fff}
+  .btn-primary:hover{background:var(--accent-ink)}
+  .btn-ghost{background:#f0f0f3;color:var(--ink)}
+  .btn-ghost:hover{background:#e6e6ea}
+  .toast{position:fixed;bottom:84px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:var(--ink);color:#fff;padding:12px 20px;border-radius:12px;
+    font-size:14px;opacity:0;pointer-events:none;transition:all .3s ease;z-index:30;
+    max-width:90vw;text-align:center}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
 </head>
 <body>
-    <div class="container">
-        <h1>📋 Ревью блоков — PROJECT_NAME_PLACEHOLDER</h1>
+<div class="wrap">
+  <header>
+    <h1>Ревью сценария</h1>
+    <div class="sub">PROJECT_SUBTITLE_PLACEHOLDER</div>
+  </header>
 
-        <div class="stats">
-            <div class="stat">
-                <div class="stat-label">Всего блоков</div>
-                <div class="stat-value" id="total-blocks">0</div>
-            </div>
-            <div class="stat">
-                <div class="stat-label">Проверено</div>
-                <div class="stat-value" id="reviewed-blocks">0</div>
-            </div>
+  <div class="howto">
+    <h2>📋 Как пользоваться — 4 простых шага</h2>
+    <ol>
+      <li><b>Прочитайте</b> текст каждого блока сверху вниз.</li>
+      <li><b>Выберите статус</b> блока в выпадающем списке <span class="pill">Что делать с блоком</span> — нравится ли он или что-то поправить.</li>
+      <li><b>Напишите комментарий</b> в поле справа: что именно не так и как лучше. Чем подробнее — тем точнее правки.</li>
+      <li>Внизу нажмите <span class="pill">📋 Скопировать ответы</span> и <b>вставьте текст обратно в чат ассистенту</b>. Он всё поймёт и внесёт правки.</li>
+    </ol>
+  </div>
+
+  <details class="legend">
+    <summary>Что означают статусы? (нажмите, чтобы раскрыть)</summary>
+    <table>
+      <tr><td>Оставить как есть</td><td>Блок хорош, ничего не меняем.</td></tr>
+      <tr><td>Переписать формулировку</td><td>Мысль верная, но фразу нужно переписать.</td></tr>
+      <tr><td>Слабый — переписать заново</td><td>Блок не цепляет, нужен новый заход.</td></tr>
+      <tr><td>Удалить блок</td><td>Блок лишний, убрать из сценария.</td></tr>
+      <tr><td>Перенести в другое место</td><td>Мысль нужная, но не здесь.</td></tr>
+      <tr><td>Не похоже на Михаила</td><td>Не тот голос / стиль, переписать ближе к манере.</td></tr>
+      <tr><td>Добавить пример / факт / кейс</td><td>Не хватает доказательства — нужен пример или цифра.</td></tr>
+      <tr><td>Добавить действие для зрителя</td><td>Нет конкретного шага, который зритель сделает.</td></tr>
+      <tr><td>Слишком длинно</td><td>Сократить.</td></tr>
+      <tr><td>Слишком абстрактно</td><td>Добавить конкретики: цифры, примеры.</td></tr>
+    </table>
+  </details>
+
+  <div class="progress">
+    <div class="bar"><i id="barFill"></i></div>
+    <div class="lbl"><span id="doneCount">0</span> из <span id="totalCount">0</span> блоков оценено</div>
+  </div>
+
+  <div id="list"></div>
+</div>
+
+<div class="actionbar">
+  <div class="inner">
+    <span class="cnt" id="cntFoot">Оценено 0 из 0</span>
+    <button class="btn-primary" onclick="copyAnswers()">📋 Скопировать ответы</button>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const PROJECT = "PROJECT_ID_PLACEHOLDER";
+const STORAGE_KEY = "scenario-review:" + PROJECT;
+
+// Статусы: код для ИИ + подпись на русском для пользователя
+const STATUSES = [
+  ["",            "— выберите —"],
+  ["OK",          "Оставить как есть"],
+  ["EDIT",        "Переписать формулировку"],
+  ["WEAK",        "Слабый — переписать заново"],
+  ["CUT",         "Удалить блок"],
+  ["MOVE",        "Перенести в другое место"],
+  ["NOT_TOV",     "Не похоже на Михаила"],
+  ["ADD_PROOF",   "Добавить пример / факт / кейс"],
+  ["ADD_ACTION",  "Добавить действие для зрителя"],
+  ["TOO_LONG",    "Слишком длинно"],
+  ["TOO_ABSTRACT","Слишком абстрактно"]
+];
+const RU = Object.fromEntries(STATUSES.map(([k,v])=>[k,v]));
+
+const BLOCKS = BLOCKS_DATA_PLACEHOLDER;
+
+const state = {}; // n -> {status, comment}
+
+function loadState(){
+  try{
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+    Object.assign(state, saved);
+  }catch(e){}
+}
+function saveState(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function render(){
+  const list = document.getElementById("list");
+  list.innerHTML = "";
+  BLOCKS.forEach(b=>{
+    const st = state[b.n] || {status:"", comment:""};
+    const card = document.createElement("div");
+    card.className = "block";
+    card.dataset.status = st.status || "";
+    const opts = STATUSES.map(([k,v])=>
+      `<option value="${k}" ${st.status===k?"selected":""}>${v}</option>`).join("");
+    card.innerHTML = `
+      <div class="top">
+        <span class="num">Блок ${b.n}</span>
+        <h3>${b.t}</h3>
+        <span class="time">${b.time}</span>
+      </div>
+      <div class="text">${escapeHtml(b.text)}</div>
+      <div class="key"><b>Ключевая мысль:</b> ${escapeHtml(b.key)}</div>
+      <div class="ctrl">
+        <div>
+          <label class="fld">Что делать с блоком</label>
+          <select data-n="${b.n}" class="sel">${opts}</select>
         </div>
-
-        <div id="blocks-container">
-            <!-- Блоки генерируются через JS -->
+        <div>
+          <label class="fld">Ваш комментарий (что не так и как лучше)</label>
+          <textarea data-n="${b.n}" class="cmt" placeholder="Например: «Сократить кейс, оставить только цифру» или «Тут добавить пример из моей ниши»">${escapeHtml(st.comment||"")}</textarea>
         </div>
+      </div>`;
+    list.appendChild(card);
+  });
 
-        <button class="export-btn" onclick="exportResults()">📤 Экспорт результатов</button>
-        <div class="toast" id="toast">Скопировано в буфер обмена!</div>
-    </div>
+  list.querySelectorAll(".sel").forEach(s=>s.addEventListener("change",e=>{
+    const n=e.target.dataset.n;
+    state[n]=state[n]||{status:"",comment:""};
+    state[n].status=e.target.value;
+    e.target.closest(".block").dataset.status=e.target.value;
+    saveState(); updateProgress();
+  }));
+  list.querySelectorAll(".cmt").forEach(t=>t.addEventListener("input",e=>{
+    const n=e.target.dataset.n;
+    state[n]=state[n]||{status:"",comment:""};
+    state[n].comment=e.target.value;
+    saveState();
+  }));
+  updateProgress();
+}
 
-    <script>
-        const blocks = BLOCKS_DATA_PLACEHOLDER;
+function updateProgress(){
+  const total=BLOCKS.length;
+  const done=BLOCKS.filter(b=>state[b.n]&&state[b.n].status).length;
+  document.getElementById("totalCount").textContent=total;
+  document.getElementById("doneCount").textContent=done;
+  document.getElementById("barFill").style.width=(done/total*100)+"%";
+  document.getElementById("cntFoot").textContent=`Оценено ${done} из ${total}`;
+}
 
-        const statusOptions = [
-            { value: '', label: '— Выбери статус —' },
-            { value: 'OK', label: 'ОК — берём как есть' },
-            { value: 'EDIT', label: 'Переписать — мысль ок, формулировка нет' },
-            { value: 'WEAK', label: 'Слабый блок — нужен новый заход' },
-            { value: 'CUT', label: 'Удалить — не нужен' },
-            { value: 'NOT_TOV', label: 'Не тот TOV — не похоже на Михаила' },
-            { value: 'ADD_PROOF', label: 'Добавить кейс/пример/цифры' },
-            { value: 'ADD_ACTION', label: 'Добавить практическое действие' },
-            { value: 'TOO_LONG', label: 'Слишком длинно — сократить' },
-            { value: 'TOO_ABSTRACT', label: 'Слишком абстрактно — конкретики' },
-            { value: 'MOVE', label: 'Перенести в другой блок' }
-        ];
+function buildJSON(){
+  return {
+    type:"scenario_review",
+    skill:"scenario-brain",
+    project:PROJECT,
+    instructions_for_ai:"Это результаты ревью сценария от пользователя. Для каждого блока: status (код статуса), status_ru (русская расшифровка), comment (правка/пожелание). Обработай блоки со status != OK по Этапу 8 скилла scenario-brain: внеси правки и пересобери сценарий.",
+    blocks:BLOCKS.map(b=>{
+      const st=state[b.n]||{status:"",comment:""};
+      return {
+        block:b.n,
+        title:b.t,
+        status:st.status||"OK",
+        status_ru:RU[st.status||"OK"],
+        comment:(st.comment||"").trim()
+      };
+    })
+  };
+}
 
-        function renderBlocks() {
-            const container = document.getElementById('blocks-container');
-            document.getElementById('total-blocks').textContent = blocks.length;
+function copyAnswers(){
+  const json=JSON.stringify(buildJSON(),null,2);
+  navigator.clipboard.writeText(json).then(()=>{
+    toast("✅ Скопировано! Теперь вставьте текст в чат ассистенту.");
+  }).catch(()=>{
+    // запасной вариант
+    const ta=document.createElement("textarea");
+    ta.value=json;document.body.appendChild(ta);ta.select();
+    document.execCommand("copy");ta.remove();
+    toast("✅ Скопировано! Вставьте текст в чат ассистенту.");
+  });
+}
 
-            blocks.forEach((block, index) => {
-                const blockDiv = document.createElement('div');
-                blockDiv.className = 'block';
+function downloadJSON(){
+  const json=JSON.stringify(buildJSON(),null,2);
+  const blob=new Blob([json],{type:"application/json"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="review-"+PROJECT+".json";
+  a.click();
+  toast("⬇ Файл JSON сохранён.");
+}
 
-                const optionsHTML = statusOptions.map(opt =>
-                    `<option value="${opt.value}">${opt.label}</option>`
-                ).join('');
+let toastTimer;
+function toast(msg){
+  const t=document.getElementById("toast");
+  t.textContent=msg;t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove("show"),2600);
+}
 
-                blockDiv.innerHTML = `
-                    <div class="block-header">
-                        <div class="block-title">Блок ${index + 1}: ${block.title}</div>
-                    </div>
-                    <div class="block-text">${block.text}</div>
-                    <select class="status-select" id="status-${index}" onchange="updateStats()">
-                        ${optionsHTML}
-                    </select>
-                    <textarea class="comment-box" id="comment-${index}"
-                              placeholder="Комментарий (если нужно что-то уточнить)"></textarea>
-                `;
-                container.appendChild(blockDiv);
-            });
-        }
+function escapeHtml(s){
+  return s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+}
 
-        function updateStats() {
-            let reviewed = 0;
-            blocks.forEach((block, index) => {
-                const select = document.getElementById(`status-${index}`);
-                if (select && select.value) reviewed++;
-            });
-            document.getElementById('reviewed-blocks').textContent = reviewed;
-        }
-
-        function exportResults() {
-            let result = '';
-            blocks.forEach((block, index) => {
-                const select = document.getElementById(`status-${index}`);
-                const statusValue = select ? select.value : '';
-                const statusLabel = statusOptions.find(opt => opt.value === statusValue);
-                const status = statusValue ? statusValue : 'НЕ ПРОВЕРЕН';
-                const comment = document.getElementById(`comment-${index}`).value;
-
-                result += `Блок ${index + 1}: ${status}`;
-                if (comment) result += ` — ${comment}`;
-                result += '\n';
-            });
-
-            navigator.clipboard.writeText(result).then(() => {
-                const toast = document.getElementById('toast');
-                toast.classList.add('show');
-                setTimeout(() => toast.classList.remove('show'), 2000);
-            });
-        }
-
-        renderBlocks();
-    </script>
+loadState();
+render();
+</script>
 </body>
 </html>
