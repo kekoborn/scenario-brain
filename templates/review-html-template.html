@@ -85,6 +85,15 @@
     font-size:14px;opacity:0;pointer-events:none;transition:all .3s ease;z-index:30;
     max-width:90vw;text-align:center}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  /* чек-лист-артефакт (антикризисный план), только режим review */
+  .checklist{position:fixed;right:16px;top:120px;width:280px;max-height:60vh;overflow:auto;
+    background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;
+    font-size:13px;box-shadow:var(--shadow);z-index:10}
+  .checklist h3{margin:0 0 8px;font-size:13px;color:var(--accent-ink)}
+  .checklist ul{margin:0;padding-left:0;list-style:none}
+  .checklist li{margin:5px 0;padding-left:2px}
+  @media(max-width:1280px){.checklist{position:static;width:auto;max-height:none;margin:14px 0}}
 </style>
 </head>
 <body>
@@ -128,6 +137,11 @@
   <div id="list"></div>
 </div>
 
+<aside class="checklist" id="checklist" hidden>
+  <h3>📋 План (накапливается по блокам)</h3>
+  <ul id="checklistItems"></ul>
+</aside>
+
 <div class="actionbar">
   <div class="inner">
     <span class="cnt" id="cntFoot">Оценено 0 из 0</span>
@@ -138,7 +152,8 @@
 
 <script>
 const PROJECT = "PROJECT_ID_PLACEHOLDER";
-const STORAGE_KEY = "scenario-review:" + PROJECT;
+const MODE = "MODE_PLACEHOLDER"; // "review" (ревью единиц) | "idea-pool" (голосование по идеям)
+const STORAGE_KEY = "scenario-review:" + MODE + ":" + PROJECT;
 
 // Статусы: код для ИИ + подпись на русском для пользователя
 const STATUSES = [
@@ -154,7 +169,15 @@ const STATUSES = [
   ["TOO_LONG",    "Слишком длинно"],
   ["TOO_ABSTRACT","Слишком абстрактно"]
 ];
-const RU = Object.fromEntries(STATUSES.map(([k,v])=>[k,v]));
+// Статусы режима пула идей (режим A — брейншторм)
+const IDEA_STATUSES = [
+  ["",      "— выберите —"],
+  ["take",  "Берём"],
+  ["maybe", "Может быть"],
+  ["drop",  "Не берём"]
+];
+const ACTIVE_STATUSES = (MODE === "idea-pool") ? IDEA_STATUSES : STATUSES;
+const RU = Object.fromEntries(ACTIVE_STATUSES.map(([k,v])=>[k,v]));
 
 const BLOCKS = BLOCKS_DATA_PLACEHOLDER;
 
@@ -178,19 +201,21 @@ function render(){
     const card = document.createElement("div");
     card.className = "block";
     card.dataset.status = st.status || "";
-    const opts = STATUSES.map(([k,v])=>
+    const opts = ACTIVE_STATUSES.map(([k,v])=>
       `<option value="${k}" ${st.status===k?"selected":""}>${v}</option>`).join("");
+    const unitLabel = (MODE==="idea-pool") ? "Идея" : "Блок";
+    const selLabel  = (MODE==="idea-pool") ? "Голос" : "Что делать с блоком";
     card.innerHTML = `
       <div class="top">
-        <span class="num">Блок ${b.n}</span>
-        <h3>${b.t}</h3>
-        <span class="time">${b.time}</span>
+        <span class="num">${unitLabel} ${b.n}</span>
+        <h3>${b.t||""}</h3>
+        <span class="time">${b.time||""}</span>
       </div>
       <div class="text">${escapeHtml(b.text)}</div>
-      <div class="key"><b>Ключевая мысль:</b> ${escapeHtml(b.key)}</div>
+      ${b.key ? `<div class="key"><b>Ключевая мысль:</b> ${escapeHtml(b.key)}</div>` : ""}
       <div class="ctrl">
         <div>
-          <label class="fld">Что делать с блоком</label>
+          <label class="fld">${selLabel}</label>
           <select data-n="${b.n}" class="sel">${opts}</select>
         </div>
         <div>
@@ -227,18 +252,23 @@ function updateProgress(){
 }
 
 function buildJSON(){
+  const isPool = (MODE==="idea-pool");
+  const def = isPool ? "" : "OK";
   return {
-    type:"scenario_review",
+    type: isPool ? "idea_pool_vote" : "scenario_review",
     skill:"scenario-brain",
     project:PROJECT,
-    instructions_for_ai:"Это результаты ревью сценария от пользователя. Для каждого блока: status (код статуса), status_ru (русская расшифровка), comment (правка/пожелание). Обработай блоки со status != OK по Этапу 8 скилла scenario-brain: внеси правки и пересобери сценарий.",
+    mode:MODE,
+    instructions_for_ai: isPool
+      ? "Это голоса команды по пулу идей (режим A брейншторма). Для каждой идеи: status (take/maybe/drop), status_ru, comment. Возьми take + помеченные maybe и сгруппируй по смыслу в главы (Этап A4)."
+      : "Это результаты ревью сценария от пользователя. Для каждой единицы: status (код статуса), status_ru (русская расшифровка), comment (правка/пожелание). Обработай единицы со status != OK по Этапу 8 скилла scenario-brain: внеси правки и пересобери сценарий.",
     blocks:BLOCKS.map(b=>{
       const st=state[b.n]||{status:"",comment:""};
       return {
         block:b.n,
         title:b.t,
-        status:st.status||"OK",
-        status_ru:RU[st.status||"OK"],
+        status:st.status||def,
+        status_ru:RU[st.status||def]||"",
         comment:(st.comment||"").trim()
       };
     })
@@ -277,11 +307,22 @@ function toast(msg){
 }
 
 function escapeHtml(s){
-  return s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  return (s==null?"":String(s)).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+}
+
+// Чек-лист-артефакт: пункты плана, собранные из полей checklist единиц (только режим review)
+function renderChecklist(){
+  const box=document.getElementById("checklist");
+  const items=BLOCKS.flatMap(b=>(b.checklist||[]).map(c=>({n:b.n,c})));
+  if(MODE!=="review"||!items.length){box.hidden=true;return;}
+  box.hidden=false;
+  document.getElementById("checklistItems").innerHTML=
+    items.map(i=>`<li><b>Б${i.n}:</b> ${escapeHtml(i.c)}</li>`).join("");
 }
 
 loadState();
 render();
+renderChecklist();
 </script>
 </body>
 </html>
