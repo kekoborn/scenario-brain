@@ -2,7 +2,10 @@
 """
 Сборка финального сценария в .docx из scenario-final.md + выбранного названия.
 Использование:
-    python3 build_docx.py <scenario-final.md> "<Название видео>" <output.docx>
+    python3 build_docx.py <scenario-final.md> "<Название видео>" <output.docx> [формат]
+
+формат: suffler (по умолчанию) — текст ведущего слово-в-слово для телепромптера;
+        oporny — опорные тезисы (первая фраза каждого абзаца буллетом).
 
 Парсит блоки (## БЛОК ...) и раздел КЛЮЧЕВЫЕ ФРАЗЫ. Карту/источники в docx не включает.
 """
@@ -13,6 +16,7 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 
 def main():
     md_path, title, out_path = sys.argv[1], sys.argv[2], sys.argv[3]
+    fmt = sys.argv[4] if len(sys.argv) > 4 else "suffler"  # suffler | oporny
     lines = open(md_path, encoding="utf-8").read().splitlines()
 
     doc = Document()
@@ -40,9 +44,19 @@ def main():
 
     def flush():
         nonlocal buf
-        if buf:
-            doc.add_paragraph(" ".join(buf).strip())
-            buf = []
+        if not buf:
+            return
+        para = " ".join(buf).strip()
+        if fmt == "oporny":
+            # опорный: первая фраза абзаца как тезис-буллет
+            thesis = re.split(r"(?<=[.!?])\s", para)[0].strip()
+            try:
+                doc.add_paragraph(thesis, style="List Bullet")
+            except KeyError:
+                doc.add_paragraph("• " + thesis)
+        else:
+            doc.add_paragraph(para)  # суфлёр: полный текст слово-в-слово
+        buf = []
 
     for l in lines[start:]:
         s = l.rstrip()
