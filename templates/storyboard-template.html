@@ -53,6 +53,11 @@ const FRAMES = FRAMES_DATA_PLACEHOLDER;
 const blocks=[...new Set(FRAMES.map(f=>f.block))];
 let active="all";
 
+function linkify(s){
+  return String(s).replace(/(https?:\/\/[^\s·]+)/g,
+    '<a href="$1" target="_blank" rel="noopener" style="color:#7db4ff;word-break:break-all">$1</a>');
+}
+
 function renderFilters(){
   const f=document.getElementById("filters");
   const mk=(v,l)=>`<button data-f="${v}" class="${active===v?'active':''}">${l}</button>`;
@@ -93,7 +98,7 @@ function renderBoard(){
       <div class="row"><b>Кадр:</b> ${f.shot}</div>
       ${f.anim?`<div class="row"><b>Анимация:</b> ${f.anim}</div>`:''}
       ${f.ref?`<div class="row"><b>Референс:</b> ${f.ref}</div>`:''}
-      ${f.art?`<div class="art">📦 Артефакт: ${f.art}</div>`:''}`;
+      ${f.art?`<div class="art">📦 Артефакт: ${linkify(f.art)}</div>`:''}`;
     g.appendChild(card);
   });
 }
