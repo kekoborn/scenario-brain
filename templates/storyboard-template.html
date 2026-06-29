@@ -2,104 +2,114 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Сториборд — PROJECT_TITLE_PLACEHOLDER</title>
 <style>
-  :root{--bg:#0c0c10;--card:#16161c;--line:#26262f;--ink:#ececf0;
-    --muted:#8a8a96;--accent:#a78bfa;--accent2:#7c5cff;--star:#facc15;}
+  :root{--bg:#f4f4f6;--paper:#fff;--ink:#1a1a1f;--mut:#6b6b76;--line:#e3e3e8;
+    --accent:#7c5cff;--accentbg:#efeaff;--ok:#1f9d57;--warn:#c9851b;}
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--ink);
-    font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
-    padding-bottom:40px}
-  .wrap{max-width:1100px;margin:0 auto;padding:28px 20px}
-  h1{font-size:25px;margin:0 0 4px;letter-spacing:-.02em}
-  .sub{color:var(--muted);margin-bottom:18px}
-  .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
-  .filters button{background:var(--card);color:var(--muted);border:1px solid var(--line);
-    border-radius:99px;padding:6px 14px;font:inherit;font-size:13px;cursor:pointer}
-  .filters button.active{background:var(--accent2);color:#fff;border-color:var(--accent2)}
-  .blockhead{margin:26px 0 10px;font-size:13px;text-transform:uppercase;
-    letter-spacing:.08em;color:var(--accent)}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px}
-  .frame{background:var(--card);border:1px solid var(--line);border-radius:14px;
-    padding:16px 18px;display:flex;flex-direction:column;gap:9px}
-  .frame.star{border-color:#5b4aa0;box-shadow:0 0 0 1px #5b4aa0 inset}
-  .frame .id{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-  .frame .code{font-weight:700;font-size:12px;background:#23232c;color:var(--accent);
-    border-radius:6px;padding:2px 8px;font-variant-numeric:tabular-nums}
-  .frame .time{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
-  .frame .pat{font-size:11px;color:#fff;background:var(--accent2);border-radius:5px;
-    padding:1px 7px;margin-left:auto}
-  .frame .star-badge{color:var(--star);font-size:13px}
-  .frame .phrase{font-size:15px;font-weight:600;line-height:1.45}
-  .frame .row{font-size:13px;color:var(--muted)}
-  .frame .row b{color:var(--ink);font-weight:600}
-  .frame .art{font-size:12px;color:var(--star);background:#231f10;
-    border:1px solid #3a3413;border-radius:8px;padding:6px 10px}
-  .legend{color:var(--muted);font-size:12px;margin:10px 0 0}
+    font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+  .wrap{max-width:1000px;margin:0 auto;padding:24px 18px 60px}
+  h1{font-size:23px;margin:0 0 4px}
+  .sub{color:var(--mut);margin-bottom:6px}
+  .filters{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0 6px}
+  .filters button{background:#fff;color:var(--mut);border:1px solid var(--line);border-radius:99px;
+    padding:5px 13px;font:inherit;font-size:13px;cursor:pointer}
+  .filters button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .legend{background:#fff7e6;border:1px solid #f0dca8;border-radius:10px;padding:9px 13px;
+    font-size:12.5px;color:#6a5418;margin:12px 0 22px}
+  .blockhead{font-size:12px;text-transform:uppercase;letter-spacing:.09em;color:var(--accent);
+    font-weight:700;margin:28px 0 12px;border-bottom:2px solid var(--accentbg);padding-bottom:6px}
+  .unit{background:var(--paper);border:1px solid var(--line);border-radius:14px;
+    padding:16px 18px;margin-bottom:14px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+  .unit.star{border-color:#cdbcff;box-shadow:0 0 0 2px var(--accentbg)}
+  .uh{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:5px}
+  .uh .code{font-weight:700;font-size:12px;background:#f0f0f4;color:var(--accent);border-radius:6px;padding:2px 8px}
+  .uh .time{font-size:12px;color:var(--mut);font-variant-numeric:tabular-nums}
+  .uh .star-badge{color:#e0a500}
+  .s{font-size:16.5px;font-weight:700;line-height:1.35;margin:1px 0 10px}
+  .img{background:#f7f5ff;border:1px solid #e6dfff;border-radius:9px;padding:9px 12px;font-size:13.5px;color:#2a2150}
+  .img .k{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:#7c5cff;font-weight:700;margin-right:6px}
+  .img .pr{display:block;margin-top:5px;font-size:12px;color:#6b6b76;font-style:italic}
+  .talk{font-size:13px;color:var(--mut)}
+  .mats{margin-top:11px}
+  .mats .mk{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--mut);font-weight:700;margin-bottom:8px}
+  .gal{display:flex;gap:12px;flex-wrap:wrap}
+  .m{width:150px;display:flex;flex-direction:column;gap:4px}
+  .m a.ph{display:block;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff;height:104px}
+  .m a.ph img{width:100%;height:100%;object-fit:contain;background:#fff;display:block}
+  .m a.ph.cover img{object-fit:cover}
+  .m .miss{height:104px;border:1px dashed #c9851b;border-radius:8px;display:flex;align-items:center;
+    justify-content:center;text-align:center;font-size:10px;color:#a06f14;padding:6px}
+  .m .cap{font-size:11.5px;color:#33333a;line-height:1.3}
+  .m .kind{font-size:10px;font-weight:700;color:#5a3fe0;background:#efeaff;border-radius:5px;padding:1px 6px;align-self:flex-start}
+  .m a.src{font-size:10px;color:#7db4ff;text-decoration:none}
+  .flag{font-size:12px;color:#a06f14;background:#fbf0d8;border:1px solid #f0dca8;border-radius:8px;padding:7px 10px;margin-top:9px}
 </style>
 </head>
 <body>
 <div class="wrap">
   <h1>Сториборд — PROJECT_TITLE_PLACEHOLDER</h1>
-  <div class="sub">PROJECT_SUBTITLE_PLACEHOLDER</div>
+  <div class="sub">Материалы-first · смысловые единицы · образ где уместен · реальные материалы + ссылки</div>
   <div class="filters" id="filters"></div>
+  <div class="legend">Под каждый смысл: <b>образ/метафора</b> (где уместен — иначе говорящая голова) + <b>реальные материалы пачкой</b> (лого, скрин сайта, фото собственника, обложка, скрин статьи) — сама картинка кликабельна и ведёт на источник. Картинки подтянутся при интернете.</div>
   <div id="board"></div>
-  <p class="legend">Паттерны: A — говорящая голова · B — текст/списки · C — таблицы/данные · D — B-roll · E — 2D/3D · F — AI/премиум</p>
 </div>
 <script>
-const FRAMES = FRAMES_DATA_PLACEHOLDER;
+// util: скриншот любой страницы по URL (сайт/статья) — встраиваемая картинка
+const MS=u=>`https://s.wordpress.com/mshots/v1/${encodeURIComponent(u)}?w=600`;
 
-const blocks=[...new Set(FRAMES.map(f=>f.block))];
+// U — массив смысловых единиц. Формат единицы:
+// {id, b(блок), bt(назв.блока, на первой единице блока), t(таймкод), star,
+//  s:"смысл",
+//  img:{idea:"что в кадре", prompt:"опц. ген-промпт"}  ИЛИ  img:null, talk:"титр/говорящая голова",
+//  mats:[{src:"<URL картинки>", link:"<источник>", cap:"подпись", kind:"лого|сайт|сооснователь|статья|обложка|фото|продукт", cover:1}],
+//  flag:"⚠️ … (если на реверификации)"}
+const U = U_DATA_PLACEHOLDER;
+
+function esc(s){return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
+
+function matsHTML(f){
+  if(!f.mats||!f.mats.length) return '';
+  const tiles=f.mats.map(m=>{
+    const ph=m.src
+      ? `<a class="ph${m.cover?' cover':''}" href="${m.link}" target="_blank" rel="noopener"><img src="${m.src}" alt="" loading="lazy" onerror="this.parentNode.outerHTML='<div class=&quot;miss&quot;>превью не загрузилось — открыть источник</div>'"></a>`
+      : `<div class="miss">артефакт добрать</div>`;
+    return `<div class="m">${ph}<span class="kind">${esc(m.kind)}</span><span class="cap">${esc(m.cap)}</span>${m.link?`<a class="src" href="${m.link}" target="_blank" rel="noopener">источник↗</a>`:''}</div>`;
+  }).join('');
+  return `<div class="mats"><div class="mk">Материалы (реальные, кликабельны)</div><div class="gal">${tiles}</div></div>`;
+}
+function imgHTML(f){
+  if(f.img) return `<div class="img"><span class="k">Образ</span>${esc(f.img.idea)}${f.img.prompt?`<span class="pr">ген: ${esc(f.img.prompt)}</span>`:''}</div>`;
+  if(f.talk) return `<div class="talk">🎙 Говорящая голова / титр — ${esc(f.talk)}</div>`;
+  return '';
+}
+
+const blocks=[...new Set(U.map(f=>f.b))];
 let active="all";
-
-function linkify(s){
-  return String(s).replace(/(https?:\/\/[^\s·]+)/g,
-    '<a href="$1" target="_blank" rel="noopener" style="color:#7db4ff;word-break:break-all">$1</a>');
-}
-
 function renderFilters(){
-  const f=document.getElementById("filters");
+  const el=document.getElementById("filters");
   const mk=(v,l)=>`<button data-f="${v}" class="${active===v?'active':''}">${l}</button>`;
-  f.innerHTML=mk("all","Все блоки")+mk("star","⭐ Ключевые")+
-    blocks.map(b=>mk(String(b),"Блок "+b)).join("");
-  f.querySelectorAll("button").forEach(b=>b.onclick=()=>{active=b.dataset.f;renderFilters();renderBoard();});
+  el.innerHTML=mk("all","Все")+mk("star","⭐ Ключевые")+mk("mat","📎 С материалами")+blocks.map(b=>mk(String(b),"Блок "+b)).join("");
+  el.querySelectorAll("button").forEach(b=>b.onclick=()=>{active=b.dataset.f;renderFilters();renderBoard();});
 }
-
 function renderBoard(){
-  const board=document.getElementById("board");
-  let list=FRAMES;
-  if(active==="star") list=FRAMES.filter(f=>f.star);
-  else if(active!=="all") list=FRAMES.filter(f=>f.block===+active);
-  board.innerHTML="";
-  let curBlock=null;
+  const board=document.getElementById("board");board.innerHTML="";
+  let list=U;
+  if(active==="star")list=U.filter(f=>f.star);
+  else if(active==="mat")list=U.filter(f=>f.mats&&f.mats.length);
+  else if(active!=="all")list=U.filter(f=>f.b===+active);
+  let cur=null;
   list.forEach(f=>{
-    if(f.block!==curBlock){
-      curBlock=f.block;
-      const hd=document.createElement("div");
-      hd.className="blockhead";
-      const title=FRAMES.find(x=>x.block===f.block&&x.bt)?.bt||("Блок "+f.block);
-      hd.textContent="Блок "+f.block+" · "+title;
-      board.appendChild(hd);
-      const grid=document.createElement("div");grid.className="grid";grid.id="g"+f.block;
-      board.appendChild(grid);
-    }
-    const g=document.getElementById("g"+f.block);
-    const card=document.createElement("div");
-    card.className="frame"+(f.star?" star":"");
-    card.innerHTML=`
-      <div class="id">
-        <span class="code">${f.id}</span>
-        <span class="time">${f.time}</span>
-        ${f.star?'<span class="star-badge">⭐</span>':''}
-        <span class="pat">${f.pat}</span>
-      </div>
-      <div class="phrase">${f.phrase}</div>
-      <div class="row"><b>Кадр:</b> ${f.shot}</div>
-      ${f.anim?`<div class="row"><b>Анимация:</b> ${f.anim}</div>`:''}
-      ${f.ref?`<div class="row"><b>Референс:</b> ${f.ref}</div>`:''}
-      ${f.art?`<div class="art">📦 Артефакт: ${linkify(f.art)}</div>`:''}`;
-    g.appendChild(card);
+    if(f.b!==cur){cur=f.b;
+      const hd=document.createElement("div");hd.className="blockhead";
+      const title=U.find(x=>x.b===f.b&&x.bt)?.bt||("Блок "+f.b);
+      hd.textContent="Блок "+f.b+" · "+title;board.appendChild(hd);}
+    const u=document.createElement("div");u.className="unit"+(f.star?" star":"");
+    u.innerHTML=`<div class="uh"><span class="code">${f.id}</span><span class="time">${f.t}</span>${f.star?'<span class="star-badge">⭐</span>':''}</div>
+      <div class="s">${esc(f.s)}</div>${imgHTML(f)}${f.flag?`<div class="flag">${esc(f.flag)}</div>`:''}${matsHTML(f)}`;
+    board.appendChild(u);
   });
 }
 renderFilters();renderBoard();

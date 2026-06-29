@@ -2,152 +2,189 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Сториборд — Антикризисный протокол</title>
 <style>
-  :root{--bg:#0c0c10;--card:#16161c;--line:#26262f;--ink:#ececf0;
-    --muted:#8a8a96;--accent:#a78bfa;--accent2:#7c5cff;--star:#facc15;}
+  :root{--bg:#f4f4f6;--paper:#fff;--ink:#1a1a1f;--mut:#6b6b76;--line:#e3e3e8;
+    --accent:#7c5cff;--accentbg:#efeaff;--ok:#1f9d57;--warn:#c9851b;}
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--ink);
-    font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
-    padding-bottom:40px}
-  .wrap{max-width:1100px;margin:0 auto;padding:28px 20px}
-  h1{font-size:25px;margin:0 0 4px;letter-spacing:-.02em}
-  .sub{color:var(--muted);margin-bottom:18px}
-  .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
-  .filters button{background:var(--card);color:var(--muted);border:1px solid var(--line);
-    border-radius:99px;padding:6px 14px;font:inherit;font-size:13px;cursor:pointer}
-  .filters button.active{background:var(--accent2);color:#fff;border-color:var(--accent2)}
-  .blockhead{margin:26px 0 10px;font-size:13px;text-transform:uppercase;
-    letter-spacing:.08em;color:var(--accent)}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px}
-  .frame{background:var(--card);border:1px solid var(--line);border-radius:14px;
-    padding:16px 18px;display:flex;flex-direction:column;gap:9px}
-  .frame.star{border-color:#5b4aa0;box-shadow:0 0 0 1px #5b4aa0 inset}
-  .frame .id{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-  .frame .code{font-weight:700;font-size:12px;background:#23232c;color:var(--accent);
-    border-radius:6px;padding:2px 8px;font-variant-numeric:tabular-nums}
-  .frame .time{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
-  .frame .pat{font-size:11px;color:#fff;background:var(--accent2);border-radius:5px;
-    padding:1px 7px;margin-left:auto}
-  .frame .star-badge{color:var(--star);font-size:13px}
-  .frame .phrase{font-size:15px;font-weight:600;line-height:1.45}
-  .frame .row{font-size:13px;color:var(--muted)}
-  .frame .row b{color:var(--ink);font-weight:600}
-  .frame .art{font-size:12px;color:var(--star);background:#231f10;
-    border:1px solid #3a3413;border-radius:8px;padding:6px 10px}
-  .legend{color:var(--muted);font-size:12px;margin:10px 0 0}
+    font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+  .wrap{max-width:1000px;margin:0 auto;padding:24px 18px 60px}
+  h1{font-size:23px;margin:0 0 4px}
+  .sub{color:var(--mut);margin-bottom:6px}
+  .filters{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0 6px}
+  .filters button{background:#fff;color:var(--mut);border:1px solid var(--line);border-radius:99px;
+    padding:5px 13px;font:inherit;font-size:13px;cursor:pointer}
+  .filters button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .legend{background:#fff7e6;border:1px solid #f0dca8;border-radius:10px;padding:9px 13px;
+    font-size:12.5px;color:#6a5418;margin:12px 0 22px}
+  .blockhead{font-size:12px;text-transform:uppercase;letter-spacing:.09em;color:var(--accent);
+    font-weight:700;margin:28px 0 12px;border-bottom:2px solid var(--accentbg);padding-bottom:6px}
+  .unit{background:var(--paper);border:1px solid var(--line);border-radius:14px;
+    padding:16px 18px;margin-bottom:14px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+  .unit.star{border-color:#cdbcff;box-shadow:0 0 0 2px var(--accentbg)}
+  .uh{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:5px}
+  .uh .code{font-weight:700;font-size:12px;background:#f0f0f4;color:var(--accent);border-radius:6px;padding:2px 8px}
+  .uh .time{font-size:12px;color:var(--mut);font-variant-numeric:tabular-nums}
+  .uh .star-badge{color:#e0a500}
+  .s{font-size:16.5px;font-weight:700;line-height:1.35;margin:1px 0 10px}
+  .img{background:#f7f5ff;border:1px solid #e6dfff;border-radius:9px;padding:9px 12px;font-size:13.5px;color:#2a2150}
+  .img .k{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:#7c5cff;font-weight:700;margin-right:6px}
+  .img .pr{display:block;margin-top:5px;font-size:12px;color:#6b6b76;font-style:italic}
+  .talk{font-size:13px;color:var(--mut)}
+  .mats{margin-top:11px}
+  .mats .mk{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--mut);font-weight:700;margin-bottom:8px}
+  .gal{display:flex;gap:12px;flex-wrap:wrap}
+  .m{width:150px;display:flex;flex-direction:column;gap:4px}
+  .m a.ph{display:block;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff;height:104px}
+  .m a.ph img{width:100%;height:100%;object-fit:contain;background:#fff;display:block}
+  .m a.ph.cover img{object-fit:cover}
+  .m .miss{height:104px;border:1px dashed #c9851b;border-radius:8px;display:flex;align-items:center;
+    justify-content:center;text-align:center;font-size:10px;color:#a06f14;padding:6px}
+  .m .cap{font-size:11.5px;color:#33333a;line-height:1.3}
+  .m .kind{font-size:10px;font-weight:700;color:#5a3fe0;background:#efeaff;border-radius:5px;padding:1px 6px;align-self:flex-start}
+  .m a.src{font-size:10px;color:#7db4ff;text-decoration:none}
+  .flag{font-size:12px;color:#a06f14;background:#fbf0d8;border:1px solid #f0dca8;border-radius:8px;padding:7px 10px;margin-top:9px}
 </style>
 </head>
 <body>
 <div class="wrap">
   <h1>Сториборд — Антикризисный протокол</h1>
-  <div class="sub">Визуальный слой по смысловым фразам · ~40 минут · ⭐ — ключевые кадры</div>
+  <div class="sub">Материалы-first · смысловые единицы · образ где уместен · реальные материалы + ссылки</div>
   <div class="filters" id="filters"></div>
+  <div class="legend">Под каждый смысл: <b>образ/метафора</b> (где уместен — иначе говорящая голова) + <b>реальные материалы пачкой</b> (лого, скрин сайта, фото собственника, обложка, скрин статьи) — сама картинка кликабельна и ведёт на источник. Картинки подтянутся при интернете.</div>
   <div id="board"></div>
-  <p class="legend">Паттерны: A — говорящая голова · B — текст/списки · C — таблицы/данные · D — B-roll · E — 2D/3D · F — AI/премиум</p>
 </div>
 <script>
-const FRAMES = [
- {id:"1.1",block:1,bt:"Хук + анонс",time:"0:00–0:20",pat:"D1+E2",phrase:"Два совершенно разных режима",shot:"Split-screen: серая половина / фиолетовая половина",anim:"Вертикальная линия раскалывает кадр",ref:"Netflix-доки «до/после»"},
- {id:"1.2",block:1,time:"0:20–0:45",pat:"F5",phrase:"Первый режим: паника, хвататься за всё",shot:"Силуэт мечется между мелкими «пожарами»",anim:"Хаотичные рывки"},
- {id:"1.3",block:1,time:"0:45–1:10",pat:"F5",phrase:"Второй режим: остановиться и бить точно",shot:"Туман рассеивается, остаётся одна цель",anim:"Из хаоса собирается стрела в цель",art:"Диптих «Режим 1 / Режим 2»",ref:"Kurzgesagt"},
- {id:"1.4",block:1,time:"1:10–1:25",pat:"B2",phrase:"Разница — в режиме, в который вы вошли",shot:"Чёрный экран, «режиме» — фиолетовым",anim:"Слова по одному, «режиме» пульсирует",art:"Текстовая карточка (якорь)"},
- {id:"1.5",block:1,time:"1:25–2:30",pat:"B1",phrase:"Анонс: деньги · что резать · команда · с чего начать",shot:"4 пункта с иконками: монета, ножницы, люди, будильник",anim:"Подсветка пункта в момент произнесения"},
+const MS=u=>`https://s.wordpress.com/mshots/v1/${encodeURIComponent(u)}?w=600`;
+const TALEB="https://upload.wikimedia.org/wikipedia/commons/0/0e/Nassim_Nicholas_Taleb_DLD_2009-012_%28cropped%29.jpg";
+const TALEB_PG="https://commons.wikimedia.org/wiki/File:Nassim_Nicholas_Taleb_DLD_2009-012_(cropped).jpg";
+const BOOK="https://content.img-gorod.ru/pim/products/images/78/e9/019f140e-44ab-7dd2-a2e7-a53eb8ef78e9.jpg?width=304&height=438";
+const BOOK_PG="https://www.chitai-gorod.ru/product/antihrupkost-kak-izvlech-vygodu-iz-haosa-2394433";
+const HOHLOV="https://s0.rbk.ru/v6_top_pics/media/img/6/78/347437740092786.jpeg";
+const HOHLOV_PG="https://style.rbc.ru/vogue/67efdd769a79477eb23c7b70";
+const GOLO_PG="https://www.novochag.ru/stars/zvezdnye-istorii/sestry-marina-i-irina-golomazdiny-biografiya-karera-lichnaya-jizn-interesnye-fakty/";
+const MEDUZA="https://meduza.io/news/2026/05/15/za-pervye-tri-mesyatsa-2026-goda-v-rossii-zakrylis-200-tysyach-predpriyatiy-malogo-i-srednego-biznesa-prichiny-snizhenie-sprosa-i-rost-nalogov";
+const HBR="https://hbr.org/2002/09/crucibles-of-leadership";
+const L12="https://logo.clearbit.com/12storeez.com",LMM="https://logo.clearbit.com/maxmara.com",LMK="https://logo.clearbit.com/michaelkors.com";
+const MOSCOWTIMES="https://ru.themoscowtimes.com/2026/05/15/v-rossii-pochti-na-10-viroslo-chislo-zakritii-malogo-biznesa-a195383";
+const BOGDAN="https://cdn.prod.website-files.com/64535f979376ea0fa8d1060e/65322aff01c0f627403a059c_photo_2022-03-28_09-19-22.webp";
+const BOGDAN_PG="https://www.setters.media/people/bogdan-lomakin-moroz";
 
- {id:"2.1",block:2,bt:"Что происходит + сценарии",time:"2:40–3:10",pat:"B2/F5",phrase:"По-старому не работает, по-новому не выстроено",shot:"Разрушенный старый мост / недостроенный новый, провал между",anim:"Фигура на краю провала"},
- {id:"2.2",block:2,time:"3:10–3:30",pat:"F5",phrase:"Кризис вскрыл нарыв",shot:"Под гладкой поверхностью трещины, одна выходит наружу"},
- {id:"2.3",block:2,time:"3:30–4:40",pat:"C1",star:1,phrase:"209 000 закрылись · 53% · 54% · только 7% сдаются",shot:"Цифры крупно: 209 000 серым, 53% жёлтым, 54% оранжевым, «93% дерутся» фиолетовым",anim:"Цифры накручиваются; акцент «93% дерутся»",art:"Инфографика «Цифры кризиса 2026»",ref:"Финансовые доки"},
- {id:"2.4",block:2,time:"4:40–6:00",pat:"B1/E2",phrase:"Три сценария: спасать / анабиоз / закрыть",shot:"Три карточки: 🛟 Спасать · ❄️ Анабиоз · ⛔ Закрыть без потерь",anim:"Карточки выезжают по очереди",art:"Карточка «3 сценария кризиса»"},
-
- {id:"3.1",block:3,bt:"Антихрупкость",time:"7:10–8:30",pat:"F5/F2",star:1,phrase:"Стакан / камень / мышца",shot:"Три объекта на чёрном; на каждый падает один груз",anim:"Стакан → осколки, камень → ничего, мышца → растёт, светится",art:"Триптих «Хрупкое / Устойчивое / Антихрупкое»",ref:"Kurzgesagt"},
- {id:"3.2",block:3,time:"8:30–8:50",pat:"B2",phrase:"В кризис главное — делать не всё, а главное",shot:"«не всё» зачёркнуто серым, «главное» крупно фиолетовым",anim:"«всё» гаснет, «главное» укрупняется",art:"Главный якорь видео"},
- {id:"3.3",block:3,time:"9:30–10:30",pat:"B4",phrase:"Маршрут: деньги → расходы → выручка → команда → завтра",shot:"5 станций с иконками по горизонтали",anim:"Линия прорисовывается между станциями (вернётся как навигатор)",ref:"Прогресс-навигация"},
- {id:"3.4",block:3,time:"10:30–12:00",pat:"B1 overlay",phrase:"Смотрите с листком — помечайте пункты",shot:"Поверх головы рука ставит галочки в чек-листе"},
-
- {id:"4.1",block:4,bt:"Деньги — две кнопки",time:"12:10–12:50",pat:"E1/F5",phrase:"Ошибка: бежит сразу в продажи",shot:"Фигура бежит мимо таблицы денег к «идеям», спотыкается"},
- {id:"4.2",block:4,time:"12:50–14:00",pat:"C1",star:1,phrase:"Выручка просела — расходы те же — вылез убыток",shot:"Две колонки «Было/Стало», прибыль уходит в красный минус",anim:"Столбец выручки оседает, прибыль в минус",art:"«Как кризис выглядит в цифрах»"},
- {id:"4.3",block:4,time:"14:00–14:40",pat:"B1",phrase:"Две кнопки: остановить утечку / вернуть выручку",shot:"🔴 «Остановить утечку» · 🟢 «Вернуть выручку»",anim:"Кнопки по очереди нажимаются",art:"«2 кнопки антикризиса»"},
- {id:"4.4",block:4,time:"14:40–15:20",pat:"F5/E2",phrase:"Время — это кислород",shot:"Песочные часы / индикатор кислорода; расходы вниз — время вверх"},
- {id:"4.5",block:4,time:"15:20–16:30",pat:"D1/F5",phrase:"12 STOREEZ: ушли премиум-бренды — занял нишу",shot:"Логотипы Max Mara/Michael Kors гаснут → полку занимает 12 STOREEZ",anim:"Освободившаяся «полка» подсвечивается"},
-
- {id:"5.1",block:5,bt:"Расходы — переплавка",time:"16:40–18:00",pat:"F5/E2",star:1,phrase:"Твёрдые расходы → переменные",shot:"Жёсткий слиток (оклады/аренда) плавится в гибкую форму (%/сделка)",anim:"Слиток → жидкий металл → гибкая структура",art:"«Твёрдые vs переменные расходы»"},
- {id:"5.2",block:5,time:"18:00–19:00",pat:"B3/E1",phrase:"Неэффективные расходы → эффективные",shot:"Две корзины: «не создаёт доход» (серая) → «крутит деньги» (фиолетовая), перелив"},
- {id:"5.3",block:5,time:"19:00–20:30",pat:"D1/B1",phrase:"Trend Surfers: фокус, дешевле подрядчики, −15%, боты",shot:"Имя Богдан Ломакин-Мороз; 3 действия + «−15%» цифрой",anim:"3 пункта + результат «рост, инвестор»",art:"Кейс-карточка агентства"},
- {id:"5.4",block:5,time:"20:30–21:30",pat:"B1",phrase:"Режу сразу: обеды, массажист, подписки, тарифы",shot:"Список «лишнего», пункты вычёркиваются красным",anim:"Зачёркивание по ходу речи"},
-
- {id:"6.1",block:6,bt:"Доходы + итог №1",time:"21:50–23:00",pat:"B1",phrase:"Три направления: приход / возвраты / дебиторка",shot:"➕ приход · 🛡 возвраты · 💰 дебиторка"},
- {id:"6.2",block:6,time:"23:00–23:40",pat:"F5",phrase:"Возвраты — молчаливая утечка выручки",shot:"Столбец выручки с течью; фигура-«хранитель» затыкает"},
- {id:"6.3",block:6,time:"24:00–25:00",pat:"B4",phrase:"Итог №1: режим, антихрупкость, 2 кнопки, расходы, выручка",shot:"4 галочки на маршруте из Блока 3",anim:"Навигатор подсвечивает пройденное"},
-
- {id:"7.1",block:7,bt:"Антикризисный штаб",time:"25:20–26:30",pat:"E1/F6",phrase:"Штаб — дружина: сильные, лояльные, кто действует",shot:"Вокруг центральной фигуры собирается ядро силуэтов"},
- {id:"7.2",block:7,time:"26:30–27:40",pat:"B1/E1",phrase:"Кого НЕ брать: нытики, токсики, кто только спорит",shot:"Стоп-лист с красными крестами; балласт-силуэты уплывают",art:"«Кто НЕ должен быть в штабе»"},
- {id:"7.3",block:7,time:"27:40–28:40",pat:"E3",phrase:"Контуры: возвраты / расходы / доходы / поставщики / юр-бух",shot:"Радиальная схема: центр-собственник, 5 лучей с ответственными"},
- {id:"7.4",block:7,time:"28:40–29:30",pat:"E5",phrase:"Ежедневный такт — короткая оперативка",shot:"Календарь с ежедневным «пульсом» планёрки"},
-
- {id:"8.1",block:8,bt:"FFF и красная кнопка",time:"29:40–30:20",pat:"B2",phrase:"FFF: первыми — то, что завтра станет невозможным",shot:"«FFF» крупно; шкала «можно сейчас → нельзя потом»"},
- {id:"8.2",block:8,time:"30:20–31:30",pat:"F5/F1",phrase:"Стресс растёт — в головы лезут дикие идеи",shot:"Лодку зашатало; тревожные «мысли-пузыри» над силуэтами"},
- {id:"8.3",block:8,time:"31:30–32:30",pat:"F5/E1",star:1,phrase:"Красная кнопка: стянуть доступы, пароли, контакты",shot:"Большая красная кнопка; узлы стягиваются в сейф",anim:"Нажатие → узлы притягиваются и запираются",art:"Чек-лист «красная кнопка»"},
- {id:"8.4",block:8,time:"32:30–33:30",pat:"E2/C1",phrase:"Один большой шок вместо серии шоков",shot:"Два графика продуктивности: пила vs один провал и восстановление"},
-
- {id:"9.1",block:9,bt:"Корзины и матрица",time:"33:50–35:00",pat:"E1/B1",star:1,phrase:"Три корзины: усилить / переконфигурировать / резать",shot:"🟢 Усилить · 🟡 Переконфигурировать · 🔴 Резать; объекты раскладываются",anim:"Карточки-сущности падают в свои корзины",art:"Карточка «3 корзины»"},
- {id:"9.2",block:9,time:"35:00–36:00",pat:"C1",star:1,phrase:"Матрица: скорость × эффект × расплата",shot:"Таблица инициатив, верхняя строка «быстро/большой/без расплаты» подсвечена",anim:"Инициативы сортируются, лучшая всплывает",art:"Шаблон-матрица приоритизации"},
- {id:"9.3",block:9,time:"36:00–36:30",pat:"B4",phrase:"Итог №2: план готов. Осталось — вы сами",shot:"Маршрут почти закрашен, станция «вы сами» пульсирует"},
-
- {id:"10.1",block:10,bt:"Транзит — из жертвы в автора",time:"36:40–37:10",pat:"E1/F5",star:1,phrase:"Страус вытаскивает голову из песка",shot:"Фиолетовый силуэт страуса поднимает голову из песка",anim:"Голова поднимается, открываются глаза",art:"«Вытащи голову из песка»",ref:"Kurzgesagt"},
- {id:"10.2",block:10,time:"37:10–38:00",pat:"E2/B1",phrase:"Жертва→автор · ребёнок→взрослый · пассив→проактив",shot:"Три пары: серое слово → фиолетовое",anim:"Каждая пара перетекает слева направо",art:"«3 перехода собственника»"},
- {id:"10.3",block:10,time:"38:00–38:30",pat:"F5",phrase:"Иллюзии → правда",shot:"Розовая дымка иллюзий рассеивается, проступает чёткая картина"},
-
- {id:"11.1",block:11,bt:"Финал — горнило и CTA",time:"38:40–39:20",pat:"F5/F2",star:1,phrase:"Горнило: лишнее выгорает, остаётся прочное",shot:"Металл в горниле под огнём → очищенный закалённый слиток",anim:"Переплавка → закалённый клинок/слиток",ref:"Кинофутаж огня/металла"},
- {id:"11.2",block:11,time:"39:20–39:40",pat:"B2",phrase:"Кризис не ломает — переплавляет",shot:"«не ломает» серым, «переплавляет» крупно фиолетовым",art:"Финальный замок (текст)"},
- {id:"11.3",block:11,time:"39:40–40:00",pat:"B1/B4",phrase:"CTA: шаблон → штаб → видео с командой → четверг запуск",shot:"3 шага списком + подсветка ссылки на шаблон",anim:"Шаги появляются, финал — кнопка «Скачать шаблон»",art:"«3 шага после видео» + энд-карта"}
+const U=[
+// БЛОК 1
+{id:"1.1",b:1,bt:"Хук + анонс",t:"0:00–0:20",s:"Два совершенно разных режима в кризис",img:{idea:"Сплит-кадр: слева паника (фигура мечется среди пожаров), справа протокол (фигура бьёт в одну цель).",prompt:"split screen, left a panicked man among small fires, right a calm focused man, cinematic"}},
+{id:"1.2",b:1,t:"0:20–0:45",s:"Первый режим: паника, хвататься за всё",img:{idea:"Фигура в центре, вокруг 4 разгорающихся очага — мечется, ничего не тушит. Дёрганая ручная камера."}},
+{id:"1.3",b:1,t:"0:45–1:10",s:"Второй режим: остановиться и бить точно",img:{idea:"Из хаоса линии стягиваются в одну стрелу → яблочко. Камера замирает.",prompt:"chaotic lines converge into a single arrow hitting a bullseye, calm, flat 2D"}},
+{id:"1.4",b:1,t:"1:10–1:25",s:"Разница — в режиме, в который вы вошли",img:null,talk:"Титр: «Разница — в РЕЖИМЕ» («режиме» крупно фиолетовым)."},
+{id:"1.5",b:1,t:"1:25–2:30",s:"Анонс: деньги · что резать · команда · с чего начать",img:null,talk:"Анонс-список из 4 пунктов с иконками (содержание видео)."},
+// БЛОК 2
+{id:"2.1",b:2,bt:"Что происходит + сценарии",t:"2:40–3:10",s:"По-старому не работает, по-новому не выстроено",img:{idea:"Разрушенный старый мост / недостроенный новый, фигура на краю провала между ними."}},
+{id:"2.2",b:2,t:"3:10–3:30",s:"Кризис вскрыл нарыв",img:{idea:"Макро: гладкий глянцевый фасад → под ним трещина прорывается наружу. Медленный push-in.",prompt:"macro, a smooth glossy surface cracking, one crack breaking through, slow push-in"}},
+{id:"2.3",b:2,t:"3:30–4:40",star:1,s:"209 000 закрылись · 53% кассовый разрыв · но сдаются только 7%",img:{idea:"Счётчик до 209 000 поверх футажа закрытого магазина → акцент «93% дерутся» крупно."},
+  mats:[{src:MS(MEDUZA),link:MEDUZA,cap:"Скрин статьи Meduza, 15.05.2026 (209 тыс. закрытий)",kind:"статья",cover:1},{src:MS(MOSCOWTIMES),link:MOSCOWTIMES,cap:"The Moscow Times, 15.05.2026 — корроборация цифры",kind:"статья",cover:1}]},
+{id:"2.4",b:2,t:"4:40–6:00",s:"Три сценария: спасать / анабиоз / закрыть без потерь",img:{idea:"Человек со спины на перепутье — три тропы в разные ландшафты: в гору (спасать) / в снег (анабиоз) / к спокойному закату-выходу (закрыть).",prompt:"a person from behind at a crossroads, three diverging paths to mountain, snowfield, calm sunset"}},
+// БЛОК 3
+{id:"3.1",b:3,bt:"Антихрупкость",t:"7:10–8:30",star:1,s:"Стакан / камень / мышца — хрупкое, устойчивое, антихрупкое",img:{idea:"Три объекта на чёрном, на каждый падает груз: стакан → осколки, камень → без изменений, мышца → растёт. В углу — Талеб как автор концепта.",prompt:"slow-mo, a glass shatters, a rock stays, a muscle grows, black background"},
+  mats:[{src:TALEB,link:TALEB_PG,cap:"Нассим Талеб — Wikimedia, CC BY-SA, 2009",kind:"фото",cover:1},{src:BOOK,link:BOOK_PG,cap:"«Антихрупкость» — обложка (Читай-город)",kind:"обложка"}]},
+{id:"3.2",b:3,t:"8:30–8:50",s:"В кризис главное — делать не всё, а ГЛАВНОЕ",img:{idea:"В темноте прожектор выхватывает ОДИН объект из десятков — остальное гаснет. Поверх титр «делать не всё, а ГЛАВНОЕ».",prompt:"a spotlight in darkness picks out one object among many, the rest fade to black, cinematic"}},
+{id:"3.3",b:3,t:"9:30–10:30",s:"Маршрут: деньги → расходы → выручка → команда → завтра",img:null,talk:"Маршрут-навигатор: 5 станций по горизонтали, линия прорисовывается (вернётся в итогах)."},
+{id:"3.4",b:3,t:"10:30–12:00",s:"Смотрите с листком — помечайте пункты",img:{idea:"Михаил за столом → из-за спины выезжает лист А4 + рука с карандашом; на листе пишется «Шаги выхода из кризиса · 1. Навести порядок в деньгах», пункты 2–3 пустые."}},
+// БЛОК 4
+{id:"4.1",b:4,bt:"Деньги — две кнопки",t:"12:10–12:50",s:"Ошибка: бежать сразу в продажи",img:{idea:"Фигура бежит мимо таблицы «ДЕНЬГИ» прямо к ярким «ИДЕЯМ» и спотыкается. Боковой трекинг."}},
+{id:"4.2",b:4,t:"12:50–14:00",star:1,s:"Выручка просела — расходы те же — вылез убыток",img:{idea:"Анимированный P&L: столбец выручки оседает, расходы стоят, линия прибыли уходит в красный минус."}},
+{id:"4.3",b:4,t:"14:00–14:40",s:"Две кнопки: остановить утечку / вернуть выручку",img:{idea:"Сплит: слева кран перекрывает струю (утечка), справа насос качает в бак (выручка)."}},
+{id:"4.4",b:4,t:"14:40–15:20",s:"Время — это кислород",img:{idea:"Индикатор кислорода = запас времени: срезаешь расходы — шкала O₂/времени растёт."}},
+{id:"4.5",b:4,t:"15:20–16:30",star:1,s:"12 STOREEZ: ушли премиум-бренды — занял освободившуюся нишу",img:{idea:"B-roll: вешалка с вещами, где крупно лого Max Mara / Michael Kors → их снимают, на место вешают вещь 12 STOREEZ."},
+  mats:[
+    {src:L12,link:"https://12storeez.com",cap:"12 STOREEZ — лого",kind:"лого"},
+    {src:MS("https://12storeez.com"),link:"https://12storeez.com",cap:"12 STOREEZ — сайт / продукция",kind:"сайт",cover:1},
+    {src:HOHLOV,link:HOHLOV_PG,cap:"Иван Хохлов — сооснователь и CEO (РБК Стиль, 2024)",kind:"сооснователь",cover:1},
+    {src:MS(GOLO_PG),link:GOLO_PG,cap:"Ирина и Марина Голомаздины — сооснователи (НовыйОчаг)",kind:"сооснователи",cover:1},
+    {src:LMM,link:"https://maxmara.com",cap:"Max Mara — лого (ушёл)",kind:"лого"},
+    {src:MS("https://www.maxmara.com"),link:"https://www.maxmara.com",cap:"Max Mara — сайт/продукция (ушёл)",kind:"сайт",cover:1},
+    {src:LMK,link:"https://michaelkors.com",cap:"Michael Kors — лого (ушёл)",kind:"лого"},
+    {src:MS("https://www.michaelkors.com"),link:"https://www.michaelkors.com",cap:"Michael Kors — сайт/продукция (ушёл)",kind:"сайт",cover:1}
+  ]},
+// БЛОК 5
+{id:"5.1",b:5,bt:"Расходы — переплавка",t:"16:40–18:00",star:1,s:"Постоянные расходы → переменные",img:{idea:"Жёсткий слиток (оклады/аренда) под огнём плавится в гибкую форму (% со сделки)."}},
+{id:"5.2",b:5,t:"18:00–19:00",s:"Неэффективные расходы → эффективные",img:{idea:"Две корзины: «не создаёт доход» (серая) → объекты переливаются в «крутит деньги» (фиолетовая)."}},
+{id:"5.3",b:5,t:"19:00–20:30",s:"Trend Surfers: фокус, дешевле подрядчики, −15%, боты",img:{idea:"Кейс-карточка агентства: 3 действия + результат."},
+  mats:[{src:MS("https://trendsurfers.ru"),link:"https://trendsurfers.ru",cap:"Trend Surfers — сайт агентства",kind:"сайт",cover:1},{src:BOGDAN,link:BOGDAN_PG,cap:"Богдан Ломакин-Мороз — основатель",kind:"основатель",cover:1},{src:MS("https://secrets.tbank.ru/lichnyj-opyt/kak-gejmifikaciya-reshaet-zadachi-biznesa/"),link:"https://secrets.tbank.ru/lichnyj-opyt/kak-gejmifikaciya-reshaet-zadachi-biznesa/",cap:"Интервью CEO Trend Surfers (Т-Банк Секреты)",kind:"статья",cover:1}],
+  flag:"⚠️ Кейс на реверификацию: исходный Forbes 550121 — 404; живой поиск НЕ подтверждает антикризисные факты (ритейл/девелоперы, −15%, доля Go Ahead). Trend Surfers — реальное агентство геймификации. Без живого источника цифры не выдавать — заменить кейс или найти прямой пруф."},
+{id:"5.4",b:5,t:"20:30–21:30",s:"Режу сразу: обеды, массажист, подписки, тарифы",img:null,talk:"Список «лишнего», пункты вычёркиваются красным по ходу речи."},
+// БЛОК 6
+{id:"6.1",b:6,bt:"Доходы + итог №1",t:"21:50–23:00",s:"Три направления: приход / возвраты / дебиторка",img:{idea:"Один бак выручки, сверху вливаются 3 трубы: приход / возвраты / дебиторка."}},
+{id:"6.2",b:6,t:"23:00–23:40",s:"Возвраты — молчаливая утечка выручки",img:{idea:"Столбец выручки с течью снизу; рука-«хранитель» ставит заплатку."}},
+{id:"6.3",b:6,t:"24:00–25:00",s:"Итог №1: режим, антихрупкость, 2 кнопки, расходы, выручка",img:null,talk:"Навигатор-маршрут подсвечивает пройденные станции (рекап)."},
+// БЛОК 7
+{id:"7.1",b:7,bt:"Антикризисный штаб",t:"25:20–26:30",s:"Штаб — дружина: сильные, лояльные, кто действует",img:{idea:"Вокруг лидера в центре стягивается плотное ядро соратников."}},
+{id:"7.2",b:7,t:"26:30–27:40",s:"Кого НЕ брать: нытики, токсики, кто только спорит",img:null,talk:"Стоп-лист с красными крестами; силуэты-балласт уплывают за кадр."},
+{id:"7.3",b:7,t:"27:40–28:40",s:"Контуры: возвраты / расходы / доходы / поставщики / юр-бух",img:{idea:"Радиальная схема: собственник в центре, 5 лучей с ответственными."}},
+{id:"7.4",b:7,t:"28:40–29:30",s:"Ежедневный такт — короткая оперативка",img:null,talk:"UI-календарь с ежедневной отметкой планёрки + таймер 15 мин."},
+// БЛОК 8
+{id:"8.1",b:8,bt:"FFF и красная кнопка",t:"29:40–30:20",s:"FFF: первыми — то, что завтра станет невозможным",img:{idea:"Окно/дверь возможностей медленно закрывается — фигура успевает проскочить, пока не захлопнулось. Поверх «FFF» + шкала «можно сейчас → нельзя потом».",prompt:"a closing door of opportunity, a figure rushing through before it shuts, dramatic light"}},
+{id:"8.2",b:8,t:"30:20–31:30",s:"Стресс растёт — в головы лезут дикие идеи",img:{idea:"Лодку/команду качает (наклон горизонта), над головами вспыхивают хаотичные мысли-пузыри."}},
+{id:"8.3",b:8,t:"31:30–32:30",star:1,s:"Красная кнопка: стянуть доступы, пароли, контакты",img:{idea:"Большая красная кнопка → нажатие → узлы (доступы/пароли/контакты) стягиваются и запираются в сейф."}},
+{id:"8.4",b:8,t:"32:30–33:30",s:"Один большой шок вместо серии шоков",img:{idea:"Два графика продуктивности: пила постоянных стрессов vs один глубокий провал и восстановление."}},
+// БЛОК 9
+{id:"9.1",b:9,bt:"Корзины и матрица",t:"33:50–35:00",star:1,s:"Три корзины: усилить / переконфигурировать / резать",img:{idea:"Активы-карточки падают в 3 цветные корзины: 🟢 усилить / 🟡 переконфигурировать / 🔴 резать."}},
+{id:"9.2",b:9,t:"35:00–36:00",star:1,s:"Матрица: скорость × эффект × расплата",img:{idea:"Таблица инициатив, верхняя строка «быстро / большой эффект / без расплаты» подсвечена (можно скринкаст реального шаблона в Sheets)."}},
+{id:"9.3",b:9,t:"36:00–36:30",s:"Итог №2: план готов. Осталось — вы сами",img:null,talk:"Навигатор закрывает все станции, кроме «вы сами» (пульсирует)."},
+// БЛОК 10
+{id:"10.1",b:10,bt:"Транзит — из жертвы в автора",t:"36:40–37:10",star:1,s:"Страус вытаскивает голову из песка",img:{idea:"Силуэт страуса: голова в песке → медленно поднимается, глаза открываются, кадр расширяется.",prompt:"an ostrich slowly pulls its head out of the sand and looks ahead, awakening, flat 2D"}},
+{id:"10.2",b:10,t:"37:10–38:00",s:"Жертва→автор · ребёнок→взрослый · пассив→проактив",img:{idea:"Три пары слов: серое слева перетекает в фиолетовое справа."}},
+{id:"10.3",b:10,t:"38:00–38:30",s:"Иллюзии → правда",img:{idea:"Кадр в розовой дымке (расфокус) → дымка рассеивается, фокус наводится, мир резкий."}},
+// БЛОК 11
+{id:"11.1",b:11,bt:"Финал — горнило и CTA",t:"38:40–39:20",star:1,s:"Горнило: лишнее выгорает, остаётся прочное",img:{idea:"Металл в горниле, искры → окалина выгорает → остаётся закалённый клинок/слиток («вы после кризиса»).",prompt:"extreme close-up, molten metal in a forge, impurities burn away revealing a tempered blade, sparks, cinematic"},
+  mats:[{src:MS(HBR),link:HBR,cap:"HBR «Crucibles of Leadership», 2002 — источник концепта «горнила»",kind:"статья",cover:1},{src:MS("https://en.wikipedia.org/wiki/Warren_Bennis"),link:"https://en.wikipedia.org/wiki/Warren_Bennis",cap:"Уоррен Беннис — автор концепта (Wikipedia)",kind:"автор",cover:1}]},
+{id:"11.2",b:11,t:"39:20–39:40",s:"Кризис не ломает — ПЕРЕПЛАВЛЯЕТ",img:null,talk:"Финальный титр: «не ломает» серым, «ПЕРЕПЛАВЛЯЕТ» крупно фиолетовым."},
+{id:"11.3",b:11,t:"39:40–40:00",s:"CTA: шаблон → штаб → видео с командой → четверг запуск",img:null,talk:"3–4 шага списком + энд-карта с кнопкой «Скачать шаблон протокола»."}
 ];
 
-const blocks=[...new Set(FRAMES.map(f=>f.block))];
-let active="all";
+function esc(s){return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
 
-function renderFilters(){
-  const f=document.getElementById("filters");
-  const mk=(v,l)=>`<button data-f="${v}" class="${active===v?'active':''}">${l}</button>`;
-  f.innerHTML=mk("all","Все блоки")+mk("star","⭐ Ключевые")+
-    blocks.map(b=>mk(String(b),"Блок "+b)).join("");
-  f.querySelectorAll("button").forEach(b=>b.onclick=()=>{active=b.dataset.f;renderFilters();renderBoard();});
+function matsHTML(f){
+  if(!f.mats||!f.mats.length) return '';
+  const tiles=f.mats.map(m=>{
+    const ph=m.src
+      ? `<a class="ph${m.cover?' cover':''}" href="${m.link}" target="_blank" rel="noopener"><img src="${m.src}" alt="" loading="lazy" onerror="this.parentNode.outerHTML='<div class=&quot;miss&quot;>превью не загрузилось — открыть источник</div>'"></a>`
+      : `<div class="miss">артефакт добрать</div>`;
+    return `<div class="m">${ph}<span class="kind">${esc(m.kind)}</span><span class="cap">${esc(m.cap)}</span>${m.link?`<a class="src" href="${m.link}" target="_blank" rel="noopener">источник↗</a>`:''}</div>`;
+  }).join('');
+  return `<div class="mats"><div class="mk">Материалы (реальные, кликабельны)</div><div class="gal">${tiles}</div></div>`;
+}
+function imgHTML(f){
+  if(f.img) return `<div class="img"><span class="k">Образ</span>${esc(f.img.idea)}${f.img.prompt?`<span class="pr">ген: ${esc(f.img.prompt)}</span>`:''}</div>`;
+  if(f.talk) return `<div class="talk">🎙 Говорящая голова / титр — ${esc(f.talk)}</div>`;
+  return '';
 }
 
+const blocks=[...new Set(U.map(f=>f.b))];
+let active="all";
+function renderFilters(){
+  const el=document.getElementById("filters");
+  const mk=(v,l)=>`<button data-f="${v}" class="${active===v?'active':''}">${l}</button>`;
+  el.innerHTML=mk("all","Все")+mk("star","⭐ Ключевые")+mk("mat","📎 С материалами")+blocks.map(b=>mk(String(b),"Блок "+b)).join("");
+  el.querySelectorAll("button").forEach(b=>b.onclick=()=>{active=b.dataset.f;renderFilters();renderBoard();});
+}
 function renderBoard(){
-  const board=document.getElementById("board");
-  let list=FRAMES;
-  if(active==="star") list=FRAMES.filter(f=>f.star);
-  else if(active!=="all") list=FRAMES.filter(f=>f.block===+active);
-  board.innerHTML="";
-  let curBlock=null;
+  const board=document.getElementById("board");board.innerHTML="";
+  let list=U;
+  if(active==="star")list=U.filter(f=>f.star);
+  else if(active==="mat")list=U.filter(f=>f.mats&&f.mats.length);
+  else if(active!=="all")list=U.filter(f=>f.b===+active);
+  let cur=null;
   list.forEach(f=>{
-    if(f.block!==curBlock){
-      curBlock=f.block;
-      const hd=document.createElement("div");
-      hd.className="blockhead";
-      const title=FRAMES.find(x=>x.block===f.block&&x.bt)?.bt||("Блок "+f.block);
-      hd.textContent="Блок "+f.block+" · "+title;
-      board.appendChild(hd);
-      const grid=document.createElement("div");grid.className="grid";grid.id="g"+f.block;
-      board.appendChild(grid);
-    }
-    const g=document.getElementById("g"+f.block);
-    const card=document.createElement("div");
-    card.className="frame"+(f.star?" star":"");
-    card.innerHTML=`
-      <div class="id">
-        <span class="code">${f.id}</span>
-        <span class="time">${f.time}</span>
-        ${f.star?'<span class="star-badge">⭐</span>':''}
-        <span class="pat">${f.pat}</span>
-      </div>
-      <div class="phrase">${f.phrase}</div>
-      <div class="row"><b>Кадр:</b> ${f.shot}</div>
-      ${f.anim?`<div class="row"><b>Анимация:</b> ${f.anim}</div>`:''}
-      ${f.ref?`<div class="row"><b>Референс:</b> ${f.ref}</div>`:''}
-      ${f.art?`<div class="art">📦 Артефакт: ${f.art}</div>`:''}`;
-    g.appendChild(card);
+    if(f.b!==cur){cur=f.b;
+      const hd=document.createElement("div");hd.className="blockhead";
+      const title=U.find(x=>x.b===f.b&&x.bt)?.bt||("Блок "+f.b);
+      hd.textContent="Блок "+f.b+" · "+title;board.appendChild(hd);}
+    const u=document.createElement("div");u.className="unit"+(f.star?" star":"");
+    u.innerHTML=`<div class="uh"><span class="code">${f.id}</span><span class="time">${f.t}</span>${f.star?'<span class="star-badge">⭐</span>':''}</div>
+      <div class="s">${esc(f.s)}</div>${imgHTML(f)}${f.flag?`<div class="flag">${esc(f.flag)}</div>`:''}${matsHTML(f)}`;
+    board.appendChild(u);
   });
 }
 renderFilters();renderBoard();
